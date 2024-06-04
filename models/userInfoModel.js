@@ -21,7 +21,7 @@ UserInfo.create = (newUserInfo, result) => {
 }
 
 UserInfo.findOne = (userID, result) => {
-    sql.query("SELECT userID FROM userInfo WHERE userID = ?", [userID], (err, res) => {
+    sql.query("SELECT * FROM userInfo WHERE userID = ?", [userID], (err, res) => {
         if (err) {
             console.log("error: ", err);
             result(err, null);

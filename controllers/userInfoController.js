@@ -1,4 +1,8 @@
 const UserInfo = require('../models/userInfoModel');
+const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
+
+const secretKey = 'secret_key';
 
 exports.idCompare = (req, res) => {
     const userID = req.query.userID;
@@ -21,9 +25,13 @@ exports.idCompare = (req, res) => {
 };
 
 exports.register = (req, res)=>{
+
+    const hash = crypto.createHash('sha256');   
+    const userPW = hash.update(req.body.userPW).digest('hex');
+
     const userInfo = new UserInfo({
         userID: req.body.userID,
-        userPW: req.body.userPW,
+        userPW: userPW,
         userName: req.body.userName,
         birth: req.body.birth,
         owner: req.body.owner,
@@ -41,15 +49,11 @@ exports.register = (req, res)=>{
 };
 
 exports.login = (req, res)=>{
-    const userInfo = new UserInfo({
-        userID: req.body.userID,
-        userPW: req.body.userPW,
-        userName: req.body.userName,
-        birth: req.body.birth,
-        owner: req.body.owner,
-    });
 
-    UserInfo.findOne(userInfo.userID,(err,user)=>{
+    const hash = crypto.createHash('sha256');
+    const userPW = hash.update(req.body.userPW).digest('hex');
+
+    UserInfo.findOne(req.body.userID,(err,user)=>{
         if (err) {
             if (err.kind === "not_found") {
                 return res.status(404).send({
@@ -62,14 +66,19 @@ exports.login = (req, res)=>{
             }
         }
 
-        if(userInfo.userPW !== user.userPW) {
+        if(userPW !== user.userPW) {
             return res.status(401).send({
                 message: "Invalid password."
             })
         }
 
+        const token = jwt.sign({ id: user.userID }, secretKey, {
+            expiresIn: 86400
+        });
+
         res.status(200).send({
             userInfo: user,
+            token: token
         });
     });
 };

@@ -1,43 +1,50 @@
 const sql = require('./db.js');
 
-const RestInfo = function(restInfo){
+const RestInfo = function (restInfo) {
     this.code = restInfo.code;
     this.restName = restInfo.restName;
     this.address = restInfo.address;
-    this.cat = restInfo.cat;
+    this.cat = restInfo.cat
+    this.reviewCount = restInfo.reviewCount
+    this.avgRepu = restInfo.avgRepu;
 }
 
-RestInfo.search = (params,cat, result) => {
+RestInfo.search = (params, cat, result) => {
     let query;
-    let queryParams =[];
+    let queryParams = [];
 
-    if(!params || params.trim() === ""){
-        query = "SELECT * FROM restInfo LIMIT 100"
+    if (!params || params.trim() === "") {
+        query = "SELECT * FROM restInfo"
     } else {
         const arr = params.split(" ");
-        const likeClauses = arr.map(word => `restName LIKE ? OR address LIKE ?`).join(" OR ");
+        const likeClauses = arr.map(word => `(restName LIKE ? OR address LIKE ?)`).join(" OR ");
         query = `SELECT * FROM restInfo WHERE ${likeClauses}`;
-        queryParams = arr.flatMap(word => [`%${word}%`, `%${word}%`]); 
+        queryParams = arr.flatMap(word => [`%${word}%`, `%${word}%`]);
     }
 
-    if (cat && cat.trim() != ""){
-        if(!params || params.trim() === ""){
-            query += " WHERE";
+    if (cat && cat.trim() != "") {
+        if (!params || params.trim() === "") {
+            query += " WHERE cat = ?";
         } else {
-            query += " AND";
+            query += " AND cat = ?";
         }
-        query += " cat = ?";
         queryParams.push(cat);
     }
 
+    query += " ORDER BY avgRepu DESC";
+
+    if (!params || params.trim() === "" || (cat && cat.trim() != "")) {
+        query += " LIMIT 100";
+    }
+
     sql.query(query, queryParams, (err, res) => {
-        if(err){
-            console.log("error: ",err);
-            result(err,null);
+        if (err) {
+            console.log("error: ", err);
+            result(err, null);
             return;
         }
 
-        result(null,res);
+        result(null, res);
     });
 };
 

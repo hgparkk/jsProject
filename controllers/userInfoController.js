@@ -9,8 +9,8 @@ exports.compareID = (req, res) => {
 
     UserInfo.findOne(userID, (err, user) => {
         if (err) {
-            if (err.kind === "not_found"){
-                return res.send({message: "User ID is available."});
+            if (err.kind === "not_found") {
+                return res.send({ message: "User ID is available." });
             } else {
                 return res.status(500).send({
                     message: err.message || "Some error occurred while checking the ID."
@@ -24,9 +24,9 @@ exports.compareID = (req, res) => {
     });
 };
 
-exports.register = (req, res)=>{
+exports.register = (req, res) => {
 
-    const hash = crypto.createHash('sha256');   
+    const hash = crypto.createHash('sha256');
     const userPW = hash.update(req.body.userPW).digest('hex');
 
     const userInfo = new UserInfo({
@@ -35,8 +35,8 @@ exports.register = (req, res)=>{
         userName: req.body.userName,
         birth: req.body.birth
     });
-    
-    UserInfo.create(userInfo, (err, data)=>{
+
+    UserInfo.create(userInfo, (err, data) => {
         if (err) {
             return res.status(500).send({
                 message: err.message || "Some error occurred while creating the UserInfo."
@@ -47,12 +47,12 @@ exports.register = (req, res)=>{
     });
 };
 
-exports.login = (req, res)=>{
+exports.login = (req, res) => {
     const userID = req.body.userID;
     const hash = crypto.createHash('sha256');
     const userPW = hash.update(req.body.userPW).digest('hex');
 
-    UserInfo.findOne(userID,(err,user)=>{
+    UserInfo.findOne(userID, (err, user) => {
         if (err) {
             if (err.kind === "not_found") {
                 return res.status(404).send({
@@ -65,7 +65,7 @@ exports.login = (req, res)=>{
             }
         }
 
-        if(userPW !== user.userPW) {
+        if (userPW !== user.userPW) {
             return res.status(401).send({
                 message: "Invalid password."
             })
@@ -139,7 +139,7 @@ exports.changePW = (req, res) => {
     });
 };
 
-exports.resign = (req,res)=>{
+exports.resign = (req, res) => {
     UserInfo.delete(req.body.userID, (err, data) => {
         if (err) {
             if (err.kind === "not_found") {

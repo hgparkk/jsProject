@@ -75,7 +75,7 @@ exports.login = (req, res) => {
             expiresIn: 86400
         });
 
-        res.status(200).send({
+        return res.status(200).send({
             userInfo: user,
             token: token
         });

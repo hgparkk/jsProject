@@ -4,8 +4,8 @@ const RestInfo = function (restInfo) {
     this.code = restInfo.code;
     this.restName = restInfo.restName;
     this.address = restInfo.address;
-    this.cat = restInfo.cat
-    this.reviewCount = restInfo.reviewCount
+    this.cat = restInfo.cat;
+    this.reviewCount = restInfo.reviewCount;
     this.avgRepu = restInfo.avgRepu;
 }
 

@@ -2,5 +2,6 @@ module.exports = {
     HOST: 'localhost',
     USER: 'root',
     PASSWORD: 'mysql',
-    DATABASE: "Capstone1"
+    DATABASE: "Capstone1",
+    TIMEZONE: 'Z'
 };

@@ -30,15 +30,17 @@ RestInfo.search = (params, cat, result) => {
     let queryParams = [];
 
     if (!params || params.trim() === "") {
-        query = "SELECT * FROM restInfo"
+        query = "SELECT * FROM restInfo";
     } else {
         const arr = params.split(" ");
-        const likeClauses = arr.map(word => `(restName LIKE ? OR address LIKE ?)`).join(" OR ");
-        query = `SELECT * FROM restInfo WHERE ${likeClauses}`;
-        queryParams = arr.flatMap(word => [`%${word}%`, `%${word}%`]);
+        const restNameClauses = arr.map(word => `restName LIKE ?`).join(" AND ");
+        const addressClauses = arr.map(word => `address LIKE ?`).join(" OR ");
+        
+        query = `SELECT * FROM restInfo WHERE (${restNameClauses}) OR (${addressClauses})`;
+        queryParams = arr.flatMap(word => [`%${word}%`]).concat(arr.map(word => `%${word}%`));
     }
 
-    if (cat && cat.trim() != "") {
+    if (cat && cat.trim() !== "") {
         if (!params || params.trim() === "") {
             query += " WHERE cat = ?";
         } else {
@@ -49,7 +51,7 @@ RestInfo.search = (params, cat, result) => {
 
     query += " ORDER BY avgRepu DESC";
 
-    if (!params || params.trim() === "" || (cat && cat.trim() != "")) {
+    if (!params || params.trim() === "" || (cat && cat.trim() !== "")) {
         query += " LIMIT 100";
     }
 

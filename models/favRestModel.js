@@ -41,9 +41,11 @@ FavRest.findAll = (params, userID, result) => {
         query = "SELECT favRest.favRestID, favRest.userID, restInfo.* FROM favRest JOIN restInfo ON favRest.code = restInfo.code";
     } else {
         const arr = params.split(" ");
-        const likeClauses = arr.map(word => `(restName LIKE ? OR address LIKE ?)`).join(" OR ");
-        query = `SELECT favRest.favRestID, favRest.userID, restInfo.* FROM favRest JOIN restInfo ON favRest.code = restInfo.code WHERE ${likeClauses}`;
-        queryParams = arr.flatMap(word => [`%${word}%`, `%${word}%`]);
+        const restNameClauses = arr.map(word => `restName LIKE ?`).join(" AND ");
+        const addressClauses = arr.map(word => `address LIKE ?`).join(" OR ");
+        
+        query = `SELECT favRest.favRestID, favRest.userID, restInfo.* FROM favRest JOIN restInfo ON favRest.code = restInfo.code WHERE (${restNameClauses}) OR (${addressClauses})`;
+        queryParams = arr.flatMap(word => [`%${word}%`]).concat(arr.map(word => `%${word}%`));
     }
 
     if (query.includes("WHERE")) {

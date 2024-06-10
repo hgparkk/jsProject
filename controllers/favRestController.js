@@ -38,7 +38,7 @@ exports.findFavRest = (req,res) => {
 }
 
 exports.searchFavRest = (req,res) => {
-    FavRest.findAll(req.body.userID, (err,favRest) => {
+    FavRest.findAll(req.body.params, req.body.userID, (err,favRest) => {
         if (err) {
             if (err.kind === "not_found") {
                 return res.status(404).send({
@@ -55,6 +55,10 @@ exports.searchFavRest = (req,res) => {
             userID: favRest.userID,
             code: favRest.code,
             restName: favRest.restName,
+            address: favRest.address,
+            cat: favRest.cat,
+            reviewCount: favRest.reviewCount,
+            avgRepu: favRest.avgRepu
         }));
 
         return res.status(200).send({

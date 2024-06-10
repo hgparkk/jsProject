@@ -9,6 +9,22 @@ const RestInfo = function (restInfo) {
     this.avgRepu = restInfo.avgRepu;
 }
 
+RestInfo.findOne = (code, result) => {
+    sql.query("SELECT * FROM restInfo WHERE code = ?", [code], (err, res) => {
+        if (err) {
+            console.log("error: ", err);
+            result(err, null);
+            return;
+        }
+        if (res.length) {
+            result(null, res[0]);
+        }
+        else {
+            result({ kind: "not_found" }, null);
+        }
+    })
+}
+
 RestInfo.search = (params, cat, result) => {
     let query;
     let queryParams = [];

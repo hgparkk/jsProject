@@ -6,6 +6,7 @@ const Review = function (review) {
     this.usersReview = review.usersReview;
     this.userID = review.userID;
     this.code = review.code;
+    this.create_at = review.create_at;
 }
 
 Review.create = (newReview, result) => {
@@ -27,6 +28,7 @@ Review.findOne = (userID, code, result) => {
             return;
         }
         if (res.length) {
+            console.log(res[0]);
             result(null, res[0]);
         }
         else {
@@ -51,8 +53,8 @@ Review.findAll= (code, result) => {
     })
 }
 
-Review.update = (reviewID, newReview, result) => {
-    sql.query("UPDATE review SET repu = ? usersReview = ? WHERE reviewID = ?", [newReview.repu,newReview.usersReview,reviewID],(err,res)=>{
+Review.update = (reviewID, repu, usersReview, result) => {
+    sql.query("UPDATE review SET repu = ?, usersReview = ? WHERE reviewID = ?", [repu,usersReview,reviewID],(err,res)=>{
         if (err) {
             console.log("error: ", err);
             result(err, null);

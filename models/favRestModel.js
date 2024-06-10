@@ -33,20 +33,41 @@ FavRest.findOne = (userID, code, result) => {
     })
 }
 
-FavRest.findAll = (userID, result) => {
-    sql.query("SELECT favRest.favRestID, favRest.userID, favRest.code, restInfo.restName FROM favRest JOIN restInfo ON favRest.code = restInfo.code WHERE userID = ?", [userID], (err, res) => {
+FavRest.findAll = (params, userID, result) => {
+    let query;
+    let queryParams = [];
+
+    if (!params || params.trim() === "") {
+        query = "SELECT favRest.favRestID, favRest.userID, restInfo.* FROM favRest JOIN restInfo ON favRest.code = restInfo.code";
+    } else {
+        const arr = params.split(" ");
+        const likeClauses = arr.map(word => `(restName LIKE ? OR address LIKE ?)`).join(" OR ");
+        query = `SELECT favRest.favRestID, favRest.userID, restInfo.* FROM favRest JOIN restInfo ON favRest.code = restInfo.code WHERE ${likeClauses}`;
+        queryParams = arr.flatMap(word => [`%${word}%`, `%${word}%`]);
+    }
+
+    if (query.includes("WHERE")) {
+        query += " AND userID = ?";
+    } else {
+        query += " WHERE userID = ?";
+    }
+    queryParams.push(userID);
+
+    query += " ORDER BY avgRepu DESC";
+
+    if (!params || params.trim() === "") {
+        query += " LIMIT 100";
+    }
+
+    sql.query(query, queryParams, (err, res) => {
         if (err) {
             console.log("error: ", err);
             result(err, null);
             return;
         }
-        if (res.length) {
-            result(null, res);
-        }
-        else {
-            result({ kind: "not_found" }, null);
-        }
-    })
+
+        result(null, res);
+    });
 }
 
 FavRest.delete = (favRestID, result) => {

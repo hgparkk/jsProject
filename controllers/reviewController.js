@@ -56,7 +56,8 @@ exports.viewAllReview = (req,res) => {
             repu: review.repu,
             usersReview: review.usersReview,
             userID: review.userID,
-            code: review.code
+            code: review.code,
+            created_at: review.created_at
         }));
 
         return res.status(200).send({

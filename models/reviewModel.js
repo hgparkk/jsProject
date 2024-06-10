@@ -44,7 +44,6 @@ Review.findAll= (code, result) => {
             return;
         }
         if (res.length) {
-            console.log(res[0]);
             result(null, res);
         }
         else {

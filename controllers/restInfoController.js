@@ -1,7 +1,7 @@
 const RestInfo = require('../models/restInfoModel');
 
-exports.find = (req,res) => {
-    RestInfo.findOne(req.body.code, (err,rest) => {
+exports.find = (req, res) => {
+    RestInfo.findOne(req.body.code, (err, rest) => {
         if (err) {
             if (err.kind === "not_found") {
                 return res.status(404).send({
@@ -11,7 +11,7 @@ exports.find = (req,res) => {
             return res.status(500).send({
                 message: `Error retrieving review with rest ${req.body.code}.`
             });
-        } 
+        }
 
         return res.status(200).send({
             restInfo: rest

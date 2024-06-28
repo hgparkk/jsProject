@@ -12,10 +12,10 @@ const restInfoRoutes = require('./routes/restInfoRoutes');
 app.use('/restInfo', restInfoRoutes);
 
 const reviewRoutes = require('./routes/reviewRoutes');
-app.use('/review',reviewRoutes);
+app.use('/review', reviewRoutes);
 
 const favRestRoutes = require('./routes/favRestRoutes');
-app.use('/favRest',favRestRoutes);
+app.use('/favRest', favRestRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

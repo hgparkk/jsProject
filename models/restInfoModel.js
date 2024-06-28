@@ -35,7 +35,7 @@ RestInfo.search = (params, cat, result) => {
         const arr = params.split(" ");
         const restNameClauses = arr.map(word => `restName LIKE ?`).join(" AND ");
         const addressClauses = arr.map(word => `address LIKE ?`).join(" OR ");
-        
+
         query = `SELECT * FROM restInfo WHERE ((${restNameClauses}) OR (${addressClauses}))`;
         queryParams = arr.flatMap(word => [`%${word}%`]).concat(arr.map(word => `%${word}%`));
     }

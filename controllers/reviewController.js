@@ -9,7 +9,7 @@ exports.registerReview = (req, res) => {
         code: req.body.code
     });
 
-    Review.create(review, (err, data)=> {
+    Review.create(review, (err, data) => {
         if (err) {
             return res.status(500).send({
                 message: err.message || "Some error occurred while creating the review."
@@ -30,7 +30,7 @@ exports.findReview = (req, res) => {
             return res.status(500).send({
                 message: `Error retrieving review with name ${req.body.userID} and rest ${req.body.code}.`
             });
-        } 
+        }
 
         return res.status(200).send({
             review: review
@@ -38,8 +38,8 @@ exports.findReview = (req, res) => {
     });
 };
 
-exports.viewAllReview = (req,res) => {
-    Review.findAll(req.body.code, (err,review) => {
+exports.viewAllReview = (req, res) => {
+    Review.findAll(req.body.code, (err, review) => {
         if (err) {
             if (err.kind === "not_found") {
                 return res.status(404).send({
@@ -49,7 +49,7 @@ exports.viewAllReview = (req,res) => {
             return res.status(500).send({
                 message: `Error retrieving review with name ${req.body.userID} and rest ${req.body.code}.`
             });
-        } 
+        }
 
         const Reviews = review.map(review => ({
             reviewID: review.reviewID,
@@ -66,8 +66,8 @@ exports.viewAllReview = (req,res) => {
     })
 }
 
-exports.updateReview = (req,res) => {
-    Review.update(req.body.reviewID,req.body.repu,req.body.usersReview,(err,review)=>{
+exports.updateReview = (req, res) => {
+    Review.update(req.body.reviewID, req.body.repu, req.body.usersReview, (err, review) => {
         if (err) {
             if (err.kind === "not_found") {
                 return res.status(404).send({
@@ -83,8 +83,8 @@ exports.updateReview = (req,res) => {
     })
 }
 
-exports.deleteReview = (req,res) => {
-    Review.delete(req.body.reviewID,(err,review)=>{
+exports.deleteReview = (req, res) => {
+    Review.delete(req.body.reviewID, (err, review) => {
         if (err) {
             if (err.kind === "not_found") {
                 return res.status(404).send({

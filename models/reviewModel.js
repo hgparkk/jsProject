@@ -10,7 +10,7 @@ const Review = function (review) {
 }
 
 Review.create = (newReview, result) => {
-    sql.query("INSERT INTO review (repu, usersReview, userID, code) VALUES ( ?, ?, ?, ?)", [newReview.repu,newReview.usersReview,newReview.userID,newReview.code], (err, res) => {
+    sql.query("INSERT INTO review (repu, usersReview, userID, code) VALUES ( ?, ?, ?, ?)", [newReview.repu, newReview.usersReview, newReview.userID, newReview.code], (err, res) => {
         if (err) {
             console.log("error: ", err);
             result(err, null);
@@ -36,7 +36,7 @@ Review.findOne = (userID, code, result) => {
     })
 }
 
-Review.findAll= (code, result) => {
+Review.findAll = (code, result) => {
     sql.query("SELECT * FROM review WHERE code = ?", [code], (err, res) => {
         if (err) {
             console.log("error: ", err);
@@ -53,7 +53,7 @@ Review.findAll= (code, result) => {
 }
 
 Review.update = (reviewID, repu, usersReview, result) => {
-    sql.query("UPDATE review SET repu = ?, usersReview = ? WHERE reviewID = ?", [repu,usersReview,reviewID],(err,res)=>{
+    sql.query("UPDATE review SET repu = ?, usersReview = ? WHERE reviewID = ?", [repu, usersReview, reviewID], (err, res) => {
         if (err) {
             console.log("error: ", err);
             result(err, null);
@@ -69,7 +69,7 @@ Review.update = (reviewID, repu, usersReview, result) => {
 }
 
 Review.delete = (reviewID, result) => {
-    sql.query("DELETE FROM review WHERE reviewID = ?",[reviewID],(err,res) =>{
+    sql.query("DELETE FROM review WHERE reviewID = ?", [reviewID], (err, res) => {
         if (err) {
             console.log("error: ", err);
             result(err, null);

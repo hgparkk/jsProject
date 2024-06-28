@@ -7,7 +7,7 @@ exports.registerFavRest = (req, res) => {
         code: req.body.code
     });
 
-    FavRest.create(favRest, (err, data)=> {
+    FavRest.create(favRest, (err, data) => {
         if (err) {
             return res.status(500).send({
                 message: err.message || "Some error occurred while creating the favRest."
@@ -18,8 +18,8 @@ exports.registerFavRest = (req, res) => {
     });
 };
 
-exports.findFavRest = (req,res) => {
-    FavRest.findOne(req.body.userID, req.body.code, (err,favRest) => {
+exports.findFavRest = (req, res) => {
+    FavRest.findOne(req.body.userID, req.body.code, (err, favRest) => {
         if (err) {
             if (err.kind === "not_found") {
                 return res.status(404).send({
@@ -29,7 +29,7 @@ exports.findFavRest = (req,res) => {
             return res.status(500).send({
                 message: `Error retrieving favRest with name ${req.body.userID} and rest ${req.body.code}.`
             });
-        } 
+        }
 
         return res.status(200).send({
             favRest: favRest
@@ -37,8 +37,8 @@ exports.findFavRest = (req,res) => {
     })
 }
 
-exports.searchFavRest = (req,res) => {
-    FavRest.findAll(req.body.params, req.body.userID, (err,favRest) => {
+exports.searchFavRest = (req, res) => {
+    FavRest.findAll(req.body.params, req.body.userID, (err, favRest) => {
         if (err) {
             if (err.kind === "not_found") {
                 return res.status(404).send({
@@ -48,7 +48,7 @@ exports.searchFavRest = (req,res) => {
             return res.status(500).send({
                 message: `Error retrieving favRest with name ${req.body.userID} and rest ${req.body.code}.`
             });
-        } 
+        }
 
         const FavRests = favRest.map(favRest => ({
             favRestID: favRest.favRestID,
@@ -67,8 +67,8 @@ exports.searchFavRest = (req,res) => {
     })
 }
 
-exports.deleteFavRest = (req,res) => {
-    FavRest.delete(req.body.favRestID,(err,favRest)=>{
+exports.deleteFavRest = (req, res) => {
+    FavRest.delete(req.body.favRestID, (err, favRest) => {
         if (err) {
             if (err.kind === "not_found") {
                 return res.status(404).send({
